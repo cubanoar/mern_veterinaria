@@ -18,14 +18,13 @@ const checkAuth = async (req, res, next) => {
       //seleccionamos para que no nos traiga el password, token, confirmado
       //lo agregamos dentro de Express, y va a ir en el req que lleve este constrolador(funcion)
       req.veterinario = await Veterinario.findById(decoded.id).select(
-        '-password -confirmado -token -_id'
+        '-password -confirmado -token'
       );
 
-      return next();
+      next();
     } catch (error) {
       const e = new Error('Token inválido');
-      res.status(403).json({ success: false, msg: e.message });
-      next();
+      return res.status(403).json({ success: false, msg: e.message });
     }
   }
 
@@ -33,8 +32,6 @@ const checkAuth = async (req, res, next) => {
     const error = new Error('Token inválido o inexistente');
     res.status(403).json({ success: false, msg: error.message });
   }
-
-  next();
 };
 
 export default checkAuth;

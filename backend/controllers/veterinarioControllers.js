@@ -19,6 +19,8 @@ const registrar = async (req, res) => {
   try {
     //Creamos la instancia de veterinario
     const veterinario = Veterinario(req.body);
+    //Validar los campos desde mongoose
+    veterinario.validate();
     //Guardar en la BD el veterinario
     const veterinarioGuardado = await veterinario.save();
 

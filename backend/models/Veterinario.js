@@ -5,23 +5,41 @@ import generarID from '../helpers/generarUUID.js';
 const veterinarioSchema = mongoose.Schema({
   nombre: {
     type: String,
-    required: true,
     trim: true,
+    required: true,
+    //Validar el nombre, solo escribimos aca, nada en el controller
+    validate: {
+      validator: function (value) {
+        return (
+          /^[a-zA-Z]{3,}( [a-zA-Z]{3,})*$/.test(value) &&
+          value.length >= 3 &&
+          value.length <= 50
+        );
+      },
+      message: 'Nombre inválido',
+    },
   },
   password: {
     type: String,
     required: true,
+    maxLength: 8,
+    minLength: 16
   },
   email: {
     type: String,
-    required: true,
     trim: true,
     unique: true,
+    maxLength: 20,
+    minLength: 10,
+    required: true,
+    match:
+      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@(gmail|yahoo|hotmail|outlook)\.(com|es|co.uk|com.ar)$/,
   },
   telefono: {
-    type: String,
+    type: Number,
     default: null,
     trim: true,
+    max: 15
   },
   web: {
     type: String,
