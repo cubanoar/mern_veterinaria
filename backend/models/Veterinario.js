@@ -7,29 +7,18 @@ const veterinarioSchema = mongoose.Schema({
     type: String,
     trim: true,
     required: true,
-    //Validar el nombre, solo escribimos aca, nada en el controller
-    validate: {
-      validator: function (value) {
-        return (
-          /^[a-zA-Z]{3,}( [a-zA-Z]{3,})*$/.test(value) &&
-          value.length >= 3 &&
-          value.length <= 50
-        );
-      },
-      message: 'Nombre inválido',
-    },
+    match: /^(?!.*\d)[a-zA-ZÀ-ÖØ-öø-ÿ]{2,10}(?:\s[a-zA-ZÀ-ÖØ-öø-ÿ]{2,10}){0,3}$/
+    
   },
   password: {
     type: String,
     required: true,
-    maxLength: 8,
-    minLength: 16
   },
   email: {
     type: String,
     trim: true,
     unique: true,
-    maxLength: 20,
+    maxLength: 50,
     minLength: 10,
     required: true,
     match:

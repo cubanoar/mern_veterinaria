@@ -3,8 +3,10 @@ import Veterinario from '../models/Veterinario.js';
 import findOneHelper from '../helpers/findOneHelper.js';
 import generarJWT from '../helpers/generarJWT.js';
 import generarID from '../helpers/generarUUID.js';
+import emailRegistro from '../helpers/emailRegistro.js';
 
 const registrar = async (req, res) => {
+  //TODO:Añadir csurf para control csrf y express-validator 
   const { email } = req.body;
 
   //Prevenir usuarios duplicados
@@ -18,23 +20,26 @@ const registrar = async (req, res) => {
 
   try {
     //Creamos la instancia de veterinario
-    const veterinario = Veterinario(req.body);
-    //Validar los campos desde mongoose
-    veterinario.validate();
+    const veterinario = new Veterinario(req.body);
     //Guardar en la BD el veterinario
     const veterinarioGuardado = await veterinario.save();
 
+    //Enviar mail
+    emailRegistro(veterinarioGuardado)
+
     //Pasados los 5 minutos
-    setTimeout(() => {
+    setTimeout(async () => {
       //Confirmar la cuenta
       veterinario.token = null;
-      veterinario.save();
+      await veterinario.save();
     }, 300000);
 
-    res.json({ success: true, veterinarioGuardado });
+
+
+    res.json({ success: true });
   } catch (error) {
+    res.json({ success: false, error: 'Algo no anda bien!!!' });
     console.log(error);
-    res.json({ success: false });
   }
 };
 

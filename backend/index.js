@@ -1,5 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import cors from 'cors';
 import conectarDB from './config/db.js';
 import veterinarioRouter from './routes/veterinario.routes.js';
 import pacienteRouter from './routes/paciente.routes.js';
@@ -10,6 +11,20 @@ app.use(express.json());
 
 //Para las Variables de entorno
 dotenv.config();
+
+//Habilitando CORS
+const dominiosPermitidos = ['http://localhost:5173','https://mailtrap.io'];
+const corsOptions = {
+  origin: function(origin, callback) {
+    if (dominiosPermitidos.indexOf(origin) !== -1) {
+      //El origin esta permitido
+      callback(null,true);
+    }else{
+      callback(new Error('No permitido por CORS'));
+    }
+  }
+}
+app.use(cors(corsOptions));
 
 conectarDB();
 

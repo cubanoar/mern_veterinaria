@@ -14,7 +14,7 @@ function App() {
         <Route path='/' element={<AuthLayout />}>
           <Route index element={<Login />} />
           <Route path='registrar' element={<Registrar />} />
-          <Route path='confirmar-cuenta/:id' element={<ConfirmarCuenta />} />
+          <Route path='confirmar-cuenta/:token' element={<ConfirmarCuenta />} />
           <Route path='olvide-password' element={<OlvidePassword />} />
         </Route>
       </Routes>
