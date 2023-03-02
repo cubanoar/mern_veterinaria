@@ -4,6 +4,7 @@ import findOneHelper from '../helpers/findOneHelper.js';
 import generarJWT from '../helpers/generarJWT.js';
 import generarID from '../helpers/generarUUID.js';
 import emailRegistro from '../helpers/emailRegistro.js';
+import emailOlvidePassword from '../helpers/emailOlvidePassword.js';
 
 const registrar = async (req, res) => {
   //TODO:Añadir csurf para control csrf y express-validator 
@@ -27,11 +28,9 @@ const registrar = async (req, res) => {
     //Enviar mail
     emailRegistro(veterinarioGuardado)
 
-    //Pasados los 5 minutos
+    //Pasados los 5 minutos borramos los datos si no confirma usuario
     setTimeout(async () => {
-      //Confirmar la cuenta
-      veterinario.token = null;
-      await veterinario.save();
+      await veterinario.deleteOne();
     }, 300000);
 
 
@@ -57,7 +56,7 @@ const confirmar = async (req, res) => {
 
   if (!usuarioConfirmar) {
     const error = new Error('Token no válido');
-    return res.status(400).json({ success: false, msg: error.message });
+    return res.status(404).json({ success: false, msg: error.message });
   }
 
   try {
@@ -117,7 +116,11 @@ const olvidePassword = async (req, res) => {
 
   try {
     existeUsuario.token = generarID();
-    existeUsuario.save();
+    await existeUsuario.save();
+
+    //Enviar email con instrucciones
+    emailOlvidePassword(existeUsuario)
+
     res.json({
       success: true,
       msg: 'Hemos enviado un email con las instrucciones',

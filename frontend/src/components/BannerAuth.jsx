@@ -8,7 +8,7 @@ const BannerAuth = ({ texto, contSpan }) => {
         <span className='text-red-600 font-black'>{`${contSpan}`}</span>
       </h1>
       <div className='h-1/3 w-2/3 m-auto'>
-        <img src='src\assets\login_svg.svg' alt='login_doctor' />
+        <img src='/login_svg.svg' alt='login_doctor' />
       </div>
     </div>
   );

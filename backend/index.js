@@ -13,7 +13,7 @@ app.use(express.json());
 dotenv.config();
 
 //Habilitando CORS
-const dominiosPermitidos = ['http://localhost:5173','https://mailtrap.io'];
+const dominiosPermitidos = [process.env.CORS_PERMISS];
 const corsOptions = {
   origin: function(origin, callback) {
     if (dominiosPermitidos.indexOf(origin) !== -1) {

@@ -1,16 +1,11 @@
 import { useState } from 'react';
-import axios from 'axios';
-
 import BannerAuth from '../components/BannerAuth';
 import Error from '../components/Error';
 import NavForm from '../components/NavForm';
 import Confirm from '../components/Confirm';
+import clienteAxios from '../config/axios';
 
 const Registrar = () => {
-  /* const [nombre, setNombre] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmarPassword, setConfirmarPassword] = useState('') */
 
   const [registro, setRegistro] = useState({
     nombre: '',
@@ -64,8 +59,8 @@ const Registrar = () => {
     //Si llegamos hasta aca es xq paso las validaciones
     //Crear el Veterinario haciendo el POST a la API
     try {
-      const url = 'http://localhost:4000/api/veterinarios';
-      const respuesta = await axios.post(url, { ...registro });
+      const url = `/veterinarios`;
+      const respuesta = await clienteAxios.post(url, { ...registro });
 
       if(!respuesta.data.success){
         setErrorAlert({ msg: respuesta.data.error });
@@ -93,7 +88,6 @@ const Registrar = () => {
       setTimeout(() => {
         setErrorAlert();
       }, 5000);
-      console.log(error.response);
     }
   };
 
